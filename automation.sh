@@ -25,3 +25,22 @@ sudo apt update
 sudo apt install awscli                                              
 s3_bucket='upgrad-vasudha'                                           
 aws s3 cp $myname-httpd-logs-$timestamp.tar s3://upgrad-vasudha                                                                                                                
+#cat /var/www/html/inventory.html
+cd /var/www/html/
+FILE=inventory.html
+if [ -f "$FILE" ];
+then
+        echo "$FILE exists."
+else
+        echo "$FILE does not exist. Creating ineventory.html"
+        touch /var/www/html/inventory.html
+        ls
+        echo "$FILE exists."
+fi
+cd  /var/log/apache2/
+logtype="httpd-logs"
+type="tar"
+size=$(du -h "$myname-httpd-logs-$timestamp.tar" | awk '{print $1}')
+echo "Log Type\t Date Created\t Type\t Size\t" >> output.txt
+echo "$logtype\t $timestamp\t $type\t $size\t" >> output.txt
+* * * * * root /root/Automation_Project/automation.sh &>> /etc/cron.d/automation
